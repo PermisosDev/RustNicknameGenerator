@@ -1,5 +1,5 @@
 [package]
-name = "RustFirst"
+name = "rust_first"
 version = "0.1.0"
 authors = ["Kekiante <55111245+f4cund0x@users.noreply.github.com>"]
 edition = "2018"
@@ -10,5 +10,5 @@ edition = "2018"
 rand = "0.7.3"
 
 [[bin]]
-name = "RustFirst"
+name = "rust_first"
 path = "main.rs"

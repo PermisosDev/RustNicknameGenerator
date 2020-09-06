@@ -5,6 +5,7 @@ use std::{
     path::Path,
     time::Instant,
     thread,
+    //sync::mpsc,
 };
 pub fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
     BufReader::new(File::open(filename)?).lines().collect()
@@ -12,11 +13,12 @@ pub fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
 
 fn main() -> std::io::Result<()> {
     
+
     let start = Instant::now();
     let mut f = File::create("result.txt").expect("Unable to create file");
+    //let (tx, rx) = mpsc::channel();
     
     let handle = thread::spawn(move || {
-        let startt = Instant::now();
         for _x in 0..1000{   
    
         let mut rng = rand::thread_rng();
@@ -26,17 +28,19 @@ fn main() -> std::io::Result<()> {
         let sufixlines = lines_from_file("Sufixes.txt").expect("Could not load lines");
         let randomprefix = &prefixeslines[rng.gen_range(0, prefixeslines.iter().count())];
         let randomsufix = &sufixlines[rng.gen_range(0, sufixlines.iter().count())];
-        let kekiante = randomprefix.to_string();
-        let kekiante2 = randomsufix.to_string();
-        let result2 = kekiante + &kekiante2;
-        writeln!(f, "{:?}",result2).expect("Unable to write file");
+        let stringprefix = randomprefix.to_string();
+        let stringsufix = randomsufix.to_string();
+        let result2 = stringprefix + &stringsufix + "\n";
+        f.write_all(result2.as_bytes()).expect("Unable to write data");
+        //tx.send(result2).unwrap()
         }
-        let elapsedt = startt.elapsed();
-        println!("MillisT: {} ms", elapsedt.as_millis());
     });
     
     handle.join().unwrap();
-    
+ 
+    /*for received in rx {
+        println!("Nickname: {}", received);
+    };*/
     let elapsed = start.elapsed();
     
     println!("Millis: {} ms", elapsed.as_millis());
