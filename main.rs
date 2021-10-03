@@ -5,7 +5,6 @@ use std::{
     path::Path,
     time::Instant,
     thread,
-    //sync::mpsc,
 };
 pub fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
     BufReader::new(File::open(filename)?).lines().collect()
@@ -16,7 +15,6 @@ fn main() -> std::io::Result<()> {
 
     let start = Instant::now();
     let mut f = File::create("result.txt").expect("Unable to create file");
-    //let (tx, rx) = mpsc::channel();
     
     let handle = thread::spawn(move || {
         for _x in 0..1000{   
@@ -32,15 +30,11 @@ fn main() -> std::io::Result<()> {
         let stringsufix = randomsufix.to_string();
         let result2 = stringprefix + &stringsufix + "\n";
         f.write_all(result2.as_bytes()).expect("Unable to write data");
-        //tx.send(result2).unwrap()
         }
     });
     
     handle.join().unwrap();
  
-    /*for received in rx {
-        println!("Nickname: {}", received);
-    };*/
     let elapsed = start.elapsed();
     
     println!("Millis: {} ms", elapsed.as_millis());
